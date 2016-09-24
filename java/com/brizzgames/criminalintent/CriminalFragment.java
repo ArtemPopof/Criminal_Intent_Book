@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Controller class for Crime model
@@ -25,6 +26,9 @@ import java.util.Locale;
 
 public class CriminalFragment extends Fragment {
 
+    public static final String EXTRA_CRIME_ID =
+            "com.brezzegames.criminalintent.crime_id";
+
     private Crime crime;
     private EditText titleField;
     private Button dateButton;
@@ -34,7 +38,10 @@ public class CriminalFragment extends Fragment {
     public void onCreate(Bundle onSavedInstanceState) {
 
         super.onCreate(onSavedInstanceState);
-        crime = new Crime();
+
+        UUID crimeId = (UUID) getArguments().getSerializable(CriminalFragment.EXTRA_CRIME_ID);
+
+        crime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
 
     }
 
@@ -45,6 +52,7 @@ public class CriminalFragment extends Fragment {
         View  v = inflater.inflate(R.layout.fragment_crime, parent, false);
 
         titleField = (EditText) v.findViewById(R.id.crime_title);
+        titleField.setText(crime.getTitle());
         titleField.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -82,6 +90,7 @@ public class CriminalFragment extends Fragment {
         dateButton.setEnabled(false);
 
         solvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
+        solvedCheckBox.setChecked(crime.isSolved());
         solvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -99,4 +108,16 @@ public class CriminalFragment extends Fragment {
         return v;
 
     }
+
+    public static CriminalFragment newInstance(UUID crimeId) {
+
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(EXTRA_CRIME_ID, crimeId);
+        CriminalFragment fragment = new CriminalFragment();
+        fragment.setArguments(arguments);
+
+        return fragment;
+
+    }
+
 }

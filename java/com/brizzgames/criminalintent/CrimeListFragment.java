@@ -1,5 +1,6 @@
 package com.brizzgames.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -44,6 +45,11 @@ public class CrimeListFragment extends ListFragment {
 
         Log.d(TAG, c.getTitle() + " was clicked");
 
+        // Launch CrimeActivity
+        Intent i = new Intent(getActivity(), CrimeActivity.class);
+        i.putExtra(CriminalFragment.EXTRA_CRIME_ID, c.getId());
+        startActivity(i);
+
     }
 
     private class CrimeAdapter extends ArrayAdapter<Crime> {
@@ -82,5 +88,11 @@ public class CrimeListFragment extends ListFragment {
 
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((CrimeAdapter) getListAdapter()).notifyDataSetChanged();
     }
 }
