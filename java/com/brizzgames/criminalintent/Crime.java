@@ -1,5 +1,6 @@
 package com.brizzgames.criminalintent;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -16,10 +17,14 @@ public class Crime {
 
     private UUID id;
     private String title;
+    private Date date;
+    private boolean solved;
 
     public Crime() {
         // Generate unique id
         id = UUID.randomUUID();
+
+        date = new Date();
     }
 
     public void setTitle(String newTitle) {
@@ -32,6 +37,22 @@ public class Crime {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setDate(Date newDate) {
+        date = newDate;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public boolean isSolved() {
+        return solved;
+    }
+
+    public void setSolved(boolean solved) {
+        this.solved = solved;
     }
 
 }
