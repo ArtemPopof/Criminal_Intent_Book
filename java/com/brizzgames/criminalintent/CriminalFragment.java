@@ -1,15 +1,19 @@
 package com.brizzgames.criminalintent;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import java.text.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -56,13 +60,25 @@ public class CriminalFragment extends Fragment {
 
         crime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
 
+        setHasOptionsMenu(true);
+
     }
+
+    @TargetApi(11)
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent,
                              Bundle savedInstanceState) {
 
         View  v = inflater.inflate(R.layout.fragment_crime, parent, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+            if (NavUtils.getParentActivityName(getActivity()) != null) {
+
+            }
+
+        }
 
         titleField = (EditText) v.findViewById(R.id.crime_title);
         titleField.setText(crime.getTitle());
@@ -186,6 +202,37 @@ public class CriminalFragment extends Fragment {
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         String newDateFormatString = crime.getDate().toString().split(" ")[0] + ", ";
         newDateFormatString += df.format(crime.getDate());
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+
+                if (NavUtils.getParentActivityName(getActivity()) != null) {
+
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+
+        super.onPause();
+
+        CrimeLab.getInstance(getActivity()).saveCrimes();
 
     }
 }
