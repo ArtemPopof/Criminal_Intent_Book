@@ -104,4 +104,10 @@ public class CrimeLab {
 
     }
 
+    public void deleteCrime(Crime c) {
+
+        crimes.remove(c);
+
+    }
+
 }
