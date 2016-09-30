@@ -1,8 +1,10 @@
 package com.brizzgames.criminalintent;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -29,7 +31,10 @@ public class CrimeLab {
 
         try {
 
-            crimes = serializer.loadCrimes();
+            if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+                crimes = serializer.loadExternalCrimes();
+            else
+                crimes = serializer.loadCrimes();
         } catch (Exception e) {
 
             crimes = new ArrayList<Crime>();
@@ -81,9 +86,13 @@ public class CrimeLab {
     public boolean saveCrimes() {
 
         try {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+                serializer.saveExternalCrimes(crimes);
+            else
+                serializer.saveCrimes(crimes);
 
-            serializer.saveCrimes(crimes);
             Log.d(TAG, "crimes saved to file");
+
             return true;
 
         } catch (Exception e) {
