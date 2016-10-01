@@ -22,11 +22,13 @@ public class Crime {
     private static final String JSON_TITLE = "title";
     private static final String JSON_SOLVED = "solved";
     private static final String JSON_DATE = "date";
+    private static final String JSON_PHOTO = "photo";
 
     private UUID id;
     private String title;
     private Date date;
     private boolean solved;
+    private Photo photo;
 
     public Crime() {
         // Generate unique id
@@ -41,6 +43,8 @@ public class Crime {
         title = json.getString(JSON_TITLE);
         solved = json.getBoolean(JSON_SOLVED);
         date = new Date(json.getString(JSON_DATE));
+        if (json.has(JSON_PHOTO))
+            photo = new Photo(json.getJSONObject(JSON_PHOTO));
 
     }
 
@@ -54,6 +58,14 @@ public class Crime {
 
     public UUID getId() {
         return id;
+    }
+
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Photo p) {
+        photo = p;
     }
 
     public void setDate(Date newDate) {
@@ -79,6 +91,8 @@ public class Crime {
         json.put(JSON_TITLE, title);
         json.put(JSON_SOLVED, solved);
         json.put(JSON_DATE, date.toString());
+        if (photo != null)
+            json.put(JSON_PHOTO, photo.toJSON());
 
         return json;
 
