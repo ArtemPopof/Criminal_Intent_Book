@@ -14,6 +14,8 @@ import android.support.v4.view.PagerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import java.text.DateFormat;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,10 +47,13 @@ public class CriminalFragment extends Fragment {
     public static final String EXTRA_CRIME_ID =
             "com.brezzegames.criminalintent.crime_id";
 
+    private static final String TAG = "CrimeFragment";
+
     private static final String DIALOG_DATE = "date";
     private static final String DIALOG_TIME = "time";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
+    private static final int REQUEST_PHOTO = 2;
 
     private Crime crime;
     private EditText titleField;
@@ -168,7 +173,7 @@ public class CriminalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), CrimeCameraActivity.class);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_PHOTO);
             }
         });
 
@@ -215,6 +220,13 @@ public class CriminalFragment extends Fragment {
             timeButton.setText(currentTime.get(Calendar.HOUR_OF_DAY )
                     + ":" + currentTime.get(Calendar.MINUTE));
 
+        } else if (requestCode == REQUEST_PHOTO) {
+
+            String filename = data
+                    .getStringExtra(CrimeCameraFragment.EXTRA_PHOTO_FILENAME);
+            if (filename != null) {
+                Log.i(TAG, "filename: " + filename);
+            }
         }
 
     }
