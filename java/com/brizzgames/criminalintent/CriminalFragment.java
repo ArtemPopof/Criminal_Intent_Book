@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.PagerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import java.text.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,11 +222,27 @@ public class CriminalFragment extends Fragment {
 
                 return true;
 
+            case R.id.menu_delete_crime_fragment:
+                CrimeLab lab = CrimeLab.getInstance(getActivity());
+                lab.deleteCrime(crime);
+                getActivity().finish();
+
+                return true;
+
             default:
 
                 return super.onOptionsItemSelected(item);
 
         }
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_criminal, menu);
 
     }
 
